@@ -28,23 +28,29 @@ const  Pagination = (props) => (
 					if (error) return <ErrorMessage error={ error }/>
 					const count = data.itemsConnection.aggregate.count;
 					const pages = Math.ceil(count / perPage);
+					const page = props.page;
 					return (
 						<PaginationStyles>
 							<Head>
-								<title>Sick Fits | Page { props.page } of { pages }</title>
+								<title>Sick Fits | Page { page } of { pages }</title>
 							</Head>
-							<Link href={{
-								pathname: 'items'
-								query: { page: page - 1}
+							<Link
+								prefetch 
+								href={{
+									pathname: 'items',
+									query: { page: page - 1}
 							}}>
-								<a>&larr Prev</a>
+								<a className='prev' aria-disabled={ page <= 1 }>&larr; Prev</a>
 							</Link>
 							<p>Page { props.page } of { pages }</p>
-							<Link href={{
-								pathname: 'items'
-								query: { page: page + 1 } 
+							<p>{ count } Items total</p>
+							<Link 
+								prefetch 
+								href={{
+									pathname: 'items',
+									query: { page: page + 1 } 
 							}}>
-								<a>&rarr Next</a>
+								<a className='next' aria-disabled={ page >= pages }>&rarr; Next</a>
 							</Link>
 						</PaginationStyles>
 					);
