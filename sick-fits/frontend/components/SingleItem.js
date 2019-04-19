@@ -50,16 +50,18 @@ class SingleItem extends React.Component {
 						if (!data.item) return <p>No item found for item { this.props.id }</p>
 						const item = data.item;
 						return (
-							<Head>
-								<title>Sick Fits | { item.title }</title>
-							</Head>
-							<SingleItemStyles>
-								<img src={ item.largeImage } alt={ item.title }/>
-								<div className="details">
-									<h2>Viewing { item.title }</h2>
-									<p>{ item.description }</p>
-								</div>
-							</SingleItemStyles>
+							<React.Fragment>
+								<Head>
+									<title>Sick Fits | { item.title }</title>
+								</Head>
+								<SingleItemStyles>
+									<img src={ item.largeImage } alt={ item.title }/>
+									<div className="details">
+										<h2>Viewing { item.title }</h2>
+										<p>{ item.description }</p>
+									</div>
+								</SingleItemStyles>
+							</React.Fragment>
 						);
 					}
 				}
