@@ -14,7 +14,6 @@ server.express.use((req, res, next) => {
 	const { token } = req.cookies;
 	if (token) {
 		const { userId } = jwt.verify(token, process.env.APP_SECRET);
-		console.log(userId);
 		// - Put the user ID onto the request for future requests to access.
 		req.userId = userId; 
 	}
