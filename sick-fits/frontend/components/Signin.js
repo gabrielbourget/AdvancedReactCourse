@@ -5,9 +5,9 @@ import Form from './styles/Form';
 import ErrorMessage from './ErrorMessage';
 import { CURRENT_USER_QUERY } from './User';
 
-const SIGNUP_MUTATION = gql`
-	mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-		signup(email: $email, name: $name, password: $password) {
+const SIGNIN_MUTATION = gql`
+	mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+		signin(email: $email, password: $password) {
 			id 
 			email 
 			name 
@@ -15,7 +15,7 @@ const SIGNUP_MUTATION = gql`
 	}
 `;
 
-class Signup extends React.Component {
+class Signin extends React.Component {
 
 	state = {
 		name: '',
@@ -30,7 +30,7 @@ class Signup extends React.Component {
 	render() {
 		return (
 			<Mutation 
-				mutation={ SIGNUP_MUTATION } 
+				mutation={ SIGNIN_MUTATION } 
 				variables={ this.state }
 				refetchQueries={[{ query: CURRENT_USER_QUERY }]}
 			>
@@ -43,7 +43,7 @@ class Signup extends React.Component {
 						}}>
 							<fieldset disabled={ loading } aria-busy={ loading }>
 								<ErrorMessage error={ error }/>
-								<h2>Sign up for an account.</h2>
+								<h2>Sign into your account.</h2>
 								<label htmlFor="email">
 									Email
 									<input 
@@ -51,16 +51,6 @@ class Signup extends React.Component {
 										name='email'
 										placeholder='email'
 										value={ this.state.email }
-										onChange={ this.saveToState }
-									/>
-								</label>
-								<label htmlFor="name">
-									Name
-									<input 
-										type='text'
-										name='name'
-										placeholder='name'
-										value={ this.state.name }
 										onChange={ this.saveToState }
 									/>
 								</label>
@@ -74,7 +64,7 @@ class Signup extends React.Component {
 										onChange={ this.saveToState }
 									/>
 								</label>		
-								<button type='submit'>Sign Up</button>								
+								<button type='submit'>Sign In</button>								
 							</fieldset>
 						</Form>	
 					)
@@ -85,4 +75,4 @@ class Signup extends React.Component {
 	}
 }
 
-export default Signup;
+export default Signin;

@@ -1,34 +1,41 @@
 import Link from 'next/link';
 import NavStyles from './styles/NavStyles';
 import User from './User';
+import Signout from './Signout';
 
 const Nav = (props) => (
-	<NavStyles>
+					
 		<User>
 			{ 
-				({ data: { me } }) => { 
-					console.log(me);
-					if (me) return <p>{ me.name }</p>
-					return null;
-				}
+				({ data: { me } }) => (
+					<NavStyles>
+						<Link href='/items'>
+							<a>Shop</a>
+						</Link>	 
+						{ me && (
+							<React.Fragment>
+								<Link href='/sell'>
+									<a>Sell</a>
+								</Link> 	
+								<Link href='/orders'>
+									<a>Orders</a>
+								</Link> 	
+								<Link href='/me'>
+									<a>Account</a>
+								</Link>				
+								<Signout />				
+							</React.Fragment>
+						)}
+						{ !me && (
+							<Link href='/signup'>
+								<a>Sign In</a>
+							</Link> 	
+						)}
+					</NavStyles>
+				)
 			}
 		</User>
-		<Link href='/items'>
-			<a>Shop</a>
-		</Link>	 
-		<Link href='/sell'>
-			<a>Sell</a>
-		</Link> 	
-		<Link href='/signup'>
-			<a>Sign Up</a>
-		</Link> 	
-		<Link href='/orders'>
-			<a>Orders</a>
-		</Link> 	
-		<Link href='/me'>
-			<a>Account</a>
-		</Link> 	
-	</NavStyles>
+			
 );
 
 export default Nav;
