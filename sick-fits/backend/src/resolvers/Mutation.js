@@ -26,7 +26,6 @@ const Mutations = {
 	async deleteItem(parent, args, ctx, info) {
 		const where = { id: args.id };
 		// - Find Item 
-		debugger;
 		const item = await ctx.db.query.item({ where }, `{ id title }`);
 
 		// - Check user permissions 
