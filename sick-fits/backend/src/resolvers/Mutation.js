@@ -3,8 +3,12 @@ const jwt = require('jsonwebtoken');
 const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
+const { hasPermission } = require('../utils');
 
 const Mutations = {
+	/*******************/
+	/* - CREATE ITEM - */
+	/*******************/
 	async createItem(parent, args, ctx, info) {
 		// -> TODO: Check if logged in.
 		if (!ctx.request.userId) {
@@ -25,6 +29,10 @@ const Mutations = {
 
 		return item;
 	},
+
+	/*******************/
+	/* - UPDATE ITEM - */
+	/*******************/	
 	updateItem(parent, args, ctx, info) {
 		// - Take a copy of the updates
 		const updates = { ...args };
@@ -38,6 +46,10 @@ const Mutations = {
 			}
 		}, info);
 	},
+
+	/*******************/
+	/* - DELETE ITEM - */
+	/*******************/	
 	async deleteItem(parent, args, ctx, info) {
 		const where = { id: args.id };
 		// - Find Item 
@@ -48,6 +60,10 @@ const Mutations = {
 		// - Delete Item
 		return ctx.db.mutation.deleteItem({ where }, info);
 	},
+
+	/***************/
+	/* - SIGN UP - */
+	/***************/	
 	async signup(parent, args, ctx, info) {
 		// - Lower case email address 
 		args.email = args.email.toLowerCase();
@@ -72,6 +88,10 @@ const Mutations = {
 		// - Return user to the browser
 		return user; 
 	},
+
+	/***************/
+	/* - SIGN IN - */
+	/***************/
 	async signin(parent, { email, password }, ctx, info) {
 		// - Check if there is a user with that email.
 		email = email.toLowerCase();
@@ -90,10 +110,18 @@ const Mutations = {
 		// - Return the user 
 		return user;
 	},
+
+	/****************/
+	/* - SIGN OUT - */
+	/****************/	
 	async signout(parent, args, ctx, info) {
 		ctx.response.clearCookie('token');
 		return { message: 'Goodbye!' };
 	},
+
+	/****************/
+	/* - SIGN OUT - */
+	/****************/		
 	async requestReset(parent, args, ctx, info) {
 		// 1. - Check if real user 
 		const user = await ctx.db.query.user({ where: { email: args.email } });
@@ -149,6 +177,29 @@ const Mutations = {
 		});
 		// 7. - Return new user. 
 		return updatedUser; 
+	},
+
+	/**************************/
+	/* - UPDATE PERMISSIONS - */
+	/**************************/	
+	async updatePermissions(parent, args, ctx, info) {
+		// 1. - Check if user is logged in.
+		if (!ctx.request.userId) throw new Error('You must be logged in to do this.');
+		// 2. - Query the current user 
+		const currentUser = await ctx.db.query.user({ 
+			where: { id: ctx.request.userId } 
+		}, info);
+		// 3. - Check if they have permissions to do this 
+		hasPermission(currentUser, ['ADMIN', 'PERMISSIONUPDATE']);
+		// 4. - Update the permissions 
+		return ctx.db.mutation.updateUser({
+			data: {
+				permissions: {
+					set: args.permissions 
+				}
+			},
+			where: { id: args.userId }
+		}, info);
 	}
 };
 
