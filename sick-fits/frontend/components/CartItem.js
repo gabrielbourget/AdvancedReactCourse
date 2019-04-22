@@ -20,6 +20,15 @@ const CartItemStyles = styled.li`
 `;
 
 const CartItem = ({ cartItem }) => {
+
+	// Check if that item exists.
+	if (!cartItem.item) return ( 
+		<CartItemStyles>
+			<p>This item has been removed.</p>
+			<RemoveFromCart id={ cartItem.id }/>
+		</CartItemStyles>
+	);
+
 	const { image } = cartItem.item;
 	const { title } = cartItem.item;
 	const { price } = cartItem.item;
