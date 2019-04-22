@@ -30,7 +30,7 @@ const Composed = adopt({
 	localState: ({ render }) => <Query query={ LOCAL_STATE_QUERY }>{ render }</Query> 
 });
 
-const Cart = () => (
+const Cart = (props) => (
 	<Composed>
 		{
 			({ user, toggleCart, localState }) => {
