@@ -50,7 +50,7 @@ class RemoveFromCart extends React.Component {
 					__typename: 'Mutation',
 					removeFromCart: {
 						__typename: 'CartItem',
-						id: this.props.id 
+						id: this.props.id
 					}
 				}}
 			>
