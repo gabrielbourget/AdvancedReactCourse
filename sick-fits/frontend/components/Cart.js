@@ -45,7 +45,10 @@ const Cart = (props) => (
 							&times;
 						</CloseButton>
 						<Supreme>{ me.name }'s Cart</Supreme>
-						<p>You have { me.cart.length } item{ me.cart.length === 1 ? '' : 's'} in your cart.</p>
+						<p>
+							You have { me.cart.reduce((tally, item) => tally + item.quantity, 0) } 
+							&nbsp; item{ me.cart.length === 1 ? '' : 's'} in your cart.
+						</p>
 						<ul>
 							{
 								me.cart.map((cartItem) => (
