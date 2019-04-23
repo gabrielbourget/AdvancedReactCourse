@@ -31,14 +31,19 @@ const CREATE_ORDER_MUTATION = gql`
 
 class TakeMyMoney extends React.Component {
 
-	onToken = (res, createOrder) => {
+	onToken = async (res, createOrder) => {
+		NProgress.start();
 		console.log(res);
 		// - Manually call mutation once we have the Strike token
-		createOrder({
+		const order = await createOrder({
 			variables: {
 				token: res.id
 			}
 		}).catch(err => {alert(err.message)});
+		Router.push({
+			pathname: '/order',
+			query: { id: order.data.createOrder.id }
+		})
 	};
 
 	render() {
