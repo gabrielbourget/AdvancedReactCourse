@@ -15,10 +15,30 @@ const totalItems = ( cart ) => {
 	return cart.reduce((tally, cartItem) => tally + cartItem.quantity, 0);
 };
 
+const CREATE_ORDER_MUTATION = gql`
+	mutation createOrder($token: String!) {
+		createOrder(token: $token) {
+			id 
+			charge 
+			total 
+			items {
+				id 
+				title 
+			}
+		}
+	}
+`;
+
 class TakeMyMoney extends React.Component {
 
-	onToken = (res) => {
+	onToken = (res, createOrder) => {
 		console.log(res);
+		// - Manually call mutation once we have the Strike token
+		createOrder({
+			variables: {
+				token: res.id
+			}
+		}).catch(err => {alert(err.message)});
 	};
 
 	render() {
@@ -27,18 +47,27 @@ class TakeMyMoney extends React.Component {
 			<User>
 				{
 					({ data: { me }}) => (
-						<StripeCheckout
-							amount={ calcTotalPrice(me.cart) }
-							name="Sick Fits" 
-							description={ `Order of ${totalItems(me.cart)}`}
-							image={ me.cart[0].item && me.cart[0].item.image }
-							stripeKey={ STRIPE_KEY }
-							currency='USD'
-							email={ me.email }
-							token={ res => this.onToken(res) }
+						<Mutation 
+							mutation={ CREATE_ORDER_MUTATION }
+							refetchQueries={[{ query: CURRENT_USER_QUERY }]}
 						>
-							{ this.props.children }
-						</StripeCheckout>
+							{
+								(createOrder) => (
+									<StripeCheckout
+										amount={ calcTotalPrice(me.cart) }
+										name="Sick Fits" 
+										description={ `Order of ${totalItems(me.cart)}`}
+										image={ me.cart.length && me.cart[0].item && me.cart[0].item.image }
+										stripeKey={ STRIPE_KEY }
+										currency='USD'
+										email={ me.email }
+										token={ res => this.onToken(res, createOrder) }
+									>
+										{ this.props.children }
+									</StripeCheckout>
+								)
+							}
+						</Mutation>
 					)
 				}
 			</User>
