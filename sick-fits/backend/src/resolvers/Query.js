@@ -5,8 +5,20 @@ const Query = {
 	// 	const items = await ctx.db.query.items();
 	// 	return items;
 	// }
+	
+	/*************/
+	/* - ITEMS - */
+	/*************/
 	items: forwardTo('db'),
+	
+	/************/
+	/* - ITEM - */
+	/************/
 	item: forwardTo('db'),
+
+	/************************/
+	/* - ITEMS CONNECTION - */
+	/************************/
 	itemsConnection: forwardTo('db'),
 	me(parent, args, ctx, info) {
 		// - Check to see if there's a user ID
@@ -17,6 +29,10 @@ const Query = {
 			where: { id: ctx.request.userId }
 		}, info);
 	},
+
+	/*************/
+	/* - USERS - */
+	/*************/
 	async users(parent, args, ctx, info) {
 		// - 1. Is the user logged in?
 		if (!ctx.request.userId) throw new Error('You must be logged in.');
@@ -25,6 +41,10 @@ const Query = {
 		// - 3. If they do, query all the users
 		return ctx.db.query.users({}, info);
 	},
+
+	/*************/
+	/* - ORDER - */
+	/*************/
 	async order(parent, args, ctx, info) {
 		// 1. - Make sure they are logged in.
 		if (!ctx.request.userId) throw new Error('You must log in first.');
@@ -40,6 +60,21 @@ const Query = {
 		}
 		// 4. - Return the order
 		return order;
+	},
+
+	/**************/
+	/* - ORDERS - */
+	/**************/
+	async orders(parent, args, ctx, info) {
+		// 1. - Get the user's id.
+		const { userId } = ctx.request;
+		if (!userId) throw new Error('You must be logged in for this.');
+		// 2. - Grab orders
+		return ctx.db.query.orders({
+			where: {
+				user: { id : userId },
+			}
+		}, info);
 	}
 };
 
