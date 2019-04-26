@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import Head from 'next/head';
 import styled from 'styled-components';
 
-import ErrorComponent from './ErrorMessage';
+import ErrorMessage from './ErrorMessage';
 
 const SingleItemStyles = styled.div`
 	max-width: 1200px;
@@ -26,7 +26,7 @@ const SingleItemStyles = styled.div`
 	}
 `;
 
-const SINGLE_ITEM_QUERY = gql`
+export const SINGLE_ITEM_QUERY = gql`
 	query SINGLE_ITEM_QUERY($id: ID!) {
 		item (where: { id: $id }) {
 			id
@@ -45,8 +45,8 @@ class SingleItem extends React.Component {
 			}}>
 				{ 
 					({ error, loading, data }) => {
-						if (error) return <Error error={ error }/>
-						if (loading) return <p>Loading</p>
+						if (error) return <ErrorMessage error={ error }/>
+						if (loading) return <p>Loading...</p>
 						if (!data.item) return <p>No item found for item { this.props.id }</p>
 						const item = data.item;
 						return (
