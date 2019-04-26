@@ -9,7 +9,8 @@ Person.prototype.fetchFavFoods = function() {
 	});
 };
 
-describe('mocking learning', () => {
+// - CURRENTLY BEING SKIPPED
+describe.skip('mocking learning', () => {
 	it('mocks a regular function', () => {
 		const fetchDogs = jest.fn();
 		fetchDogs('snickers');
