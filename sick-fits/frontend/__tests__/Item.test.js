@@ -20,7 +20,7 @@ describe.skip('<Item/>', () =>  {
 		wrapper = shallow(<ItemComponent item={ fakeItem }/>);
 	});
 
-	it('renders the image propertly', () => {
+	it('renders the image properly', () => {
 		const img = wrapper.find('img');
 		expect(img.props().src).toBe(fakeItem.image);
 		expect(img.props().alt).toBe(fakeItem.title);		
