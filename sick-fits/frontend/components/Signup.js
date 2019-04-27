@@ -5,7 +5,7 @@ import Form from './styles/Form';
 import ErrorMessage from './ErrorMessage';
 import { CURRENT_USER_QUERY } from './User';
 
-const SIGNUP_MUTATION = gql`
+export const SIGNUP_MUTATION = gql`
 	mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
 		signup(email: $email, name: $name, password: $password) {
 			id 
@@ -36,11 +36,15 @@ class Signup extends React.Component {
 			>
 				{
 					(signup, { error, loading }) => (
-						<Form method='post' onSubmit={ async (e) => {
-							e.preventDefault();
-							await signup();
-							this.setState({ name: '', email: '', password: ''})
-						}}>
+						<Form 
+							method='post' 
+							onSubmit={ async (e) => {
+								e.preventDefault();
+								await signup();
+								this.setState({ name: '', email: '', password: ''});
+							}}
+							data-test='form'
+						>
 							<fieldset disabled={ loading } aria-busy={ loading }>
 								<ErrorMessage error={ error }/>
 								<h2>Sign up for an account.</h2>
