@@ -70,15 +70,18 @@ class CreateItem extends React.Component {
 			>
 				{ 
 					(createItem, { loading, error }) => (
-						<Form onSubmit={ async (e) => {
-							e.preventDefault();
-							const res = await createItem();
-							Router.push({
-								pathname: '/item',
-								query: { id: res.data.createItem.id }
-							});
-						}}>
-							<ErrorMessage error={ error } />
+						<Form 
+							onSubmit={ async (e) => {
+								e.preventDefault();
+								const res = await createItem();
+								Router.push({
+									pathname: '/item',
+									query: { id: res.data.createItem.id }
+								});
+							}}
+							data-test='form'
+						>
+							{ error && <ErrorMessage error={ error } /> }
 							<fieldset disabled={ loading } aria-busy={ loading }>
 								<label htmlFor="title">
 									Title

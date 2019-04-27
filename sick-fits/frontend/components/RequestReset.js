@@ -5,7 +5,7 @@ import Form from './styles/Form';
 import ErrorMessage from './ErrorMessage';
 import { CURRENT_USER_QUERY } from './User';
 
-const REQUEST_RESET_MUTATION = gql`
+export const REQUEST_RESET_MUTATION = gql`
 	mutation REQUEST_RESET_MUTATION($email: String!) {
 		requestReset(email: $email) {
 			message
@@ -31,13 +31,17 @@ class RequestReset extends React.Component {
 			>
 				{
 					(reset, { error, loading, called }) => (
-						<Form method='post' onSubmit={ async (e) => {
-							e.preventDefault();
-							await reset();
-							this.setState({email: ''})
-						}}>
+						<Form 
+							method='post' 
+							onSubmit={ async (e) => {
+								e.preventDefault();
+								await reset();
+								this.setState({email: ''})
+							}}
+							data-test='form'
+						>
 							<fieldset disabled={ loading } aria-busy={ loading }>
-								<ErrorMessage error={ error }/>
+								{ error && <ErrorMessage error={ error }/> }
 								{ !error && !loading && called && <p>Success! Check your email for a reset link.</p> }
 								<h2>Request a password reset.</h2>
 								<label htmlFor="email">
