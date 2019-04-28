@@ -9,7 +9,7 @@ import formatMoney from '../lib/formatMoney';
 import ErrorMessage from '../components/ErrorMessage';
 import OrderStyles from './styles/OrderStyles';
 
-const SINGLE_ORDER_QUERY = gql`
+export const SINGLE_ORDER_QUERY = gql`
 	query SINGLE_ORDER_QUERY($id: ID!) {
 		order(id: $id) {
 			id 
@@ -49,7 +49,7 @@ class Order extends React.Component {
 						if (loading) return <p>Loading...</p>
 						const order = data.order;
 						return (
-							<OrderStyles>
+							<OrderStyles data-test='order'>
 								<Head>
 									<title>Sick Fits - Order { order.id }</title>
 								</Head>
