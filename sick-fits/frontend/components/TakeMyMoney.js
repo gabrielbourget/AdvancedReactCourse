@@ -47,7 +47,6 @@ class TakeMyMoney extends React.Component {
 	};
 
 	render() {
-		console.log( STRIPE_KEY );
 		return (
 			<User>
 				{
